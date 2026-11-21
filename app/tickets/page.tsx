@@ -71,10 +71,12 @@ export default async function TicketsPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="font-medium">
-                      <span className="text-slate-400">#{t.id}</span> {t.title}
-                    </p>
+  <Link href={`/tickets/${t.id}`} className="hover:underline">
+    <span className="text-slate-400">#{t.id}</span> {t.title}
+  </Link>
+</p>
                     {isStaff && (
-                      <p className="text-sm text-slate-500">
+                      <p className="mt-1 text-sm text-slate-500">
                         Requested by {nameById.get(t.requesterId) ?? "unknown"}
                       </p>
                     )}
