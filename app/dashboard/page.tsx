@@ -23,6 +23,9 @@ export default async function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-4">
+          <Link href="/tickets" className="text-sm underline">
+  Tickets
+</Link>
           <Link href="/admin" className="text-sm underline">
             Admin area
           </Link>
