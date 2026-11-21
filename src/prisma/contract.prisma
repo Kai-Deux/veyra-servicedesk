@@ -1,0 +1,61 @@
+// use prisma-8
+
+enum Role {
+  USER
+  AGENT
+  ADMIN
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model User {
+  id           Int                @id @default(autoincrement())
+  email        String             @unique
+  name         String?
+  passwordHash String
+  role         Role               @default(USER)
+  requested    Ticket[]           @relation("Requester")
+  assigned     Ticket[]           @relation("Assignee")
+  comments     Comment[]
+  createdAt    DateTime           @default(now()) @onCreate(now())
+  updatedAt    temporal.UpdatedAt
+}
+
+model Ticket {
+  id          Int                @id @default(autoincrement())
+  title       String
+  description String
+  status      TicketStatus       @default(OPEN)
+  priority    Priority           @default(MEDIUM)
+  requester   User               @relation("Requester", fields: [requesterId], references: [id])
+  requesterId Int
+  assignee    User?              @relation("Assignee", fields: [assigneeId], references: [id])
+  assigneeId  Int?
+  comments    Comment[]
+  createdAt   DateTime           @default(now()) @onCreate(now())
+  updatedAt   temporal.UpdatedAt
+}
+
+model Comment {
+  id        Int                @id @default(autoincrement())
+  body      String
+  ticket    Ticket             @relation(fields: [ticketId], references: [id])
+  ticketId  Int
+  author    User               @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime           @default(now()) @onCreate(now())
+  updatedAt temporal.UpdatedAt
+}
